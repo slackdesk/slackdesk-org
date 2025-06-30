@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SlackDesk.org</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0a0a0a;
+      color: #cccccc;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
+    }
+
+    .matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: black;
+      color: #0f0;
+      opacity: 0.08;
+      pointer-events: none;
+      font-size: 18px;
+      line-height: 1.2;
+      white-space: pre;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      z-index: 1;
+      position: relative;
+      padding: 0 1em;
+    }
+
+    #typed {
+      font-size: 1.5em;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+      margin-bottom: 1em;
+      min-height: 3em;
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadein 3s ease-in-out forwards;
+    }
+
+    .delay-1 { animation-delay: 2s; }
+    .delay-2 { animation-delay: 4s; }
+    .delay-3 { animation-delay: 6s; }
+
+    @keyframes fadein {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix" id="matrix"></div>
+
+  <div class="center">
+    <div id="typed"></div>
+    <p class="fade-in delay-1">Slackware. Pure and powerful.</p>
+    <p class="fade-in delay-2">Software Test Automation. Engineered efficiency.</p>
+    <p class="fade-in delay-3">Artificial Intelligence. The unknown frontier.</p>
+  </div>
+
+  <script>
+    // Typing animation
+    const text = "Welcome to SlackDesk.org\nStay tuned for mysterious revelations...";
+    const typedEl = document.getElementById("typed");
+    let i = 0;
+
+    function type() {
+      if (i < text.length) {
+        typedEl.innerHTML += text[i] === "\n" ? "<br/>" : text[i];
+        i++;
+        setTimeout(type, 75);
+      }
+    }
+
+    type();
+
+    // Matrix background
+    const matrix = document.getElementById("matrix");
+    const columns = 80;
+    const rows = 40;
+    const chars = "⟁⟡⛧⊛◈♒⟁⟐♁♇✶▣◌☍";
+
+    function randomChar() {
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    function generateMatrix() {
+      let str = "";
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < columns; j++) {
+          str += randomChar();
+        }
+        str += "\n";
+      }
+      matrix.textContent = str;
+    }
+
+    setInterval(generateMatrix, 500);
+  </script>
+</body>
+</html>
