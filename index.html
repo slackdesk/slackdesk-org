@@ -28,20 +28,6 @@
       white-space: pre;
     }
 
-    .background-logo {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 55%;
-      height: 100vh;
-      background: url('slackdesk-logo.png') no-repeat center right;
-      background-size: contain;
-      opacity: 0.05;
-      z-index: 1;
-      pointer-events: none;
-      animation: flicker 8s infinite ease-in-out;
-    }
-
     @keyframes flicker {
 
       0%,
@@ -94,7 +80,6 @@
 
   <!-- Background effects -->
   <div class="matrix" id="matrix"></div>
-  <div class="background-logo"></div>
 
   <!-- Terminal interface -->
   <div class="center">
