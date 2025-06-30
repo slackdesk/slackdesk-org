@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>SlackDesk.org</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
@@ -15,7 +16,8 @@
 
     .matrix {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       z-index: 0;
@@ -26,23 +28,16 @@
       white-space: pre;
     }
 
-    .background-logo {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 55%;
-      height: 100vh;
-      background: url('slackdesk-logo.png') no-repeat center right;
-      background-size: contain;
-      opacity: 0.05;
-      z-index: 1;
-      pointer-events: none;
-      animation: flicker 8s infinite ease-in-out;
-    }
-
     @keyframes flicker {
-      0%, 100% { opacity: 0.04; }
-      50% { opacity: 0.07; }
+
+      0%,
+      100% {
+        opacity: 0.04;
+      }
+
+      50% {
+        opacity: 0.07;
+      }
     }
 
     .center {
@@ -77,13 +72,16 @@
     }
 
     @keyframes blink {
-      50% { background: transparent; }
+      50% {
+        background: transparent;
+      }
     }
 
     .controls {
       display: flex;
       gap: 0.5em;
     }
+
     button {
       background: #111;
       color: #0f0;
@@ -92,6 +90,7 @@
       font-family: monospace;
       cursor: pointer;
     }
+
     input[type="text"] {
       background: #111;
       color: #0f0;
@@ -102,10 +101,10 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="matrix" id="matrix"></div>
-  <div class="background-logo"></div>
 
   <div class="center">
     <div id="terminal"></div>
@@ -113,7 +112,8 @@
       <button onclick="togglePause()">⏯ Pause/Play</button>
       <button onclick="clearTerminal()">🧹 Clear</button>
     </div>
-    <input type="text" id="userInput" placeholder="Type your own command and press Enter..." onkeydown="handleUserInput(event)" />
+    <input type="text" id="userInput" placeholder="Type your own command and press Enter..."
+      onkeydown="handleUserInput(event)" />
   </div>
 
   <script>
@@ -230,4 +230,5 @@
   </script>
 
 </body>
+
 </html>
