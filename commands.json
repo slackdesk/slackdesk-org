@@ -1,0 +1,12 @@
+[
+  { "cmd": "uname -sr", "output": "Linux 5.15.19" },
+  { "cmd": "cat /etc/slackware-version", "output": "Slackware 15.0" },
+  { "cmd": "uptime", "output": "19:26:34 up 5 days, 13:44, 1 user, load average: 0.00, 0.01, 0.05" },
+  { "cmd": "ls /etc/slackpkg", "output": "blacklist  mirrors  mirrors.d/  slackpkg.conf  templates" },
+  { "cmd": "whoami", "output": "root" },
+  { "cmd": "df -h /", "output": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        20G    5G   15G   25% /" },
+  { "cmd": "free -m", "output": "Mem:   7972  1320  6652  112  364  780\nSwap:  2047     0  2047" },
+  { "cmd": "ps aux | grep X", "output": "root     1024  0.1  0.3  20320  5824 tty7  Ss+  10:24  0:00 /usr/bin/X" },
+  { "cmd": "slackpkg update", "output": "Updating the package list... done.\nChecking GPG signatures... done." },
+  { "cmd": "dmesg | tail -n 3", "output": "[    3.451] EXT4-fs (sda1): mounted clean\n[    3.452] SlackInit: Starting graphical login\n[    3.455] Started X11 session on tty7" }
+]

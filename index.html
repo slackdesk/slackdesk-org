@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <title>SlackDesk.org</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     body {
       margin: 0;
@@ -16,8 +15,7 @@
 
     .matrix {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100vw;
       height: 100vh;
       z-index: 0;
@@ -28,16 +26,23 @@
       white-space: pre;
     }
 
+    .background-logo {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 100vh;
+      background: url('slackdesk-logo.png') no-repeat center right;
+      background-size: contain;
+      opacity: 0.05;
+      z-index: 1;
+      pointer-events: none;
+      animation: flicker 8s infinite ease-in-out;
+    }
+
     @keyframes flicker {
-
-      0%,
-      100% {
-        opacity: 0.04;
-      }
-
-      50% {
-        opacity: 0.07;
-      }
+      0%, 100% { opacity: 0.04; }
+      50% { opacity: 0.07; }
     }
 
     .center {
@@ -57,6 +62,9 @@
       white-space: pre-wrap;
       line-height: 1.5;
       font-size: 1em;
+      overflow-y: auto;
+      max-height: 80vh;
+      margin-bottom: 1em;
     }
 
     .cursor {
@@ -69,25 +77,135 @@
     }
 
     @keyframes blink {
-      50% {
-        background: transparent;
-      }
+      50% { background: transparent; }
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5em;
+    }
+    button {
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 0.4em 0.8em;
+      font-family: monospace;
+      cursor: pointer;
+    }
+    input[type="text"] {
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 0.3em;
+      width: 100%;
+      font-family: monospace;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- Background effects -->
   <div class="matrix" id="matrix"></div>
+  <div class="background-logo"></div>
 
-  <!-- Terminal interface -->
   <div class="center">
     <div id="terminal"></div>
+    <div class="controls">
+      <button onclick="togglePause()">⏯ Pause/Play</button>
+      <button onclick="clearTerminal()">🧹 Clear</button>
+    </div>
+    <input type="text" id="userInput" placeholder="Type your own command and press Enter..." onkeydown="handleUserInput(event)" />
   </div>
 
-  <!-- Matrix animation script -->
   <script>
+    const terminal = document.getElementById('terminal');
+    const userInput = document.getElementById('userInput');
+    let commands = [];
+    let lineBuffer = '';
+    let currentLine = 0;
+    let charIndex = 0;
+    let state = 'cmd';
+    let cursorEl;
+    let isPaused = false;
+    let typing = false;
+
+    function typeNext() {
+      if (isPaused || typing === false) return;
+
+      if (!cursorEl) {
+        cursorEl = document.createElement('span');
+        cursorEl.className = 'cursor';
+        terminal.appendChild(cursorEl);
+      }
+
+      const entry = commands[currentLine];
+      const text = state === 'cmd'
+        ? `user@slackdesk:~$ ${entry.cmd}`
+        : entry.output;
+
+      if (charIndex < text.length) {
+        lineBuffer += text[charIndex++];
+        terminal.innerHTML = lineBuffer;
+        terminal.appendChild(cursorEl);
+        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(typeNext, 30);
+      } else {
+        lineBuffer += '\n';
+        terminal.innerHTML = lineBuffer;
+        terminal.appendChild(cursorEl);
+        terminal.scrollTop = terminal.scrollHeight;
+
+        if (state === 'cmd') {
+          state = 'output';
+          charIndex = 0;
+          setTimeout(typeNext, 600);
+        } else {
+          state = 'cmd';
+          charIndex = 0;
+          currentLine = (currentLine + 1) % commands.length;
+          setTimeout(typeNext, 1200);
+        }
+      }
+    }
+
+    function togglePause() {
+      isPaused = !isPaused;
+      if (!isPaused) {
+        typing = true;
+        typeNext();
+      }
+    }
+
+    function clearTerminal() {
+      lineBuffer = '';
+      terminal.innerHTML = '';
+      terminal.appendChild(cursorEl);
+    }
+
+    function handleUserInput(e) {
+      if (e.key === 'Enter') {
+        const value = userInput.value.trim();
+        if (value) {
+          lineBuffer += `user@slackdesk:~$ ${value}\n(fake) Command executed.` + '\n';
+          terminal.innerHTML = lineBuffer;
+          terminal.appendChild(cursorEl);
+          terminal.scrollTop = terminal.scrollHeight;
+          userInput.value = '';
+        }
+      }
+    }
+
+    fetch('commands.json')
+      .then(res => res.json())
+      .then(data => {
+        commands = data;
+        typing = true;
+        typeNext();
+      })
+      .catch(err => {
+        terminal.innerText = "Error loading commands.json\n" + err;
+      });
+
+    // Matrix animation
     const matrix = document.getElementById("matrix");
     const columns = 80;
     const rows = 40;
@@ -111,60 +229,5 @@
     setInterval(generateMatrix, 600);
   </script>
 
-  <!-- Animated terminal script -->
-  <script>
-    const terminal = document.getElementById('terminal');
-    const commands = [
-      { cmd: "uname -sr", output: "Linux 5.15.19" },
-      { cmd: "cat /etc/slackware-version", output: "Slackware 15.0" },
-      { cmd: "uptime", output: "19:26:34 up 5 days, 13:44, 1 user, load average: 0.00, 0.01, 0.05" },
-      { cmd: "ls /etc/slackpkg", output: "blacklist  mirrors  mirrors.d/  slackpkg.conf  templates " },
-      { cmd: "whoami", output: "root" },
-      { cmd: "df -h /", output: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        20G    5G   15G   25% /" },
-      { cmd: "free -m", output: "Mem:   7972  1320  6652  112  364  780\nSwap:  2047     0  2047" },
-      { cmd: "ps aux | grep X", output: "root     1024  0.1  0.3  20320  5824 tty7  Ss+  10:24  0:00 /usr/bin/X" },
-      { cmd: "slackpkg update", output: "Updating the package list... done.\nChecking GPG signatures... done." }
-    ];
-
-    let lineBuffer = '';
-    let currentLine = 0;
-    let charIndex = 0;
-    let state = 'cmd'; // or 'output'
-    let cursorEl;
-
-    function typeNext() {
-      if (!cursorEl) {
-        cursorEl = document.createElement('span');
-        cursorEl.className = 'cursor';
-        terminal.appendChild(cursorEl);
-      }
-
-      const entry = commands[currentLine];
-      const text = (state === 'cmd' ? `user@slackdesk:~$ ${entry.cmd}` : entry.output);
-      if (charIndex < text.length) {
-        lineBuffer += text[charIndex++];
-        terminal.innerHTML = lineBuffer;
-        terminal.appendChild(cursorEl);
-        setTimeout(typeNext, 30);
-      } else {
-        lineBuffer += '\n';
-        terminal.innerHTML = lineBuffer;
-        terminal.appendChild(cursorEl);
-
-        if (state === 'cmd') {
-          state = 'output';
-          charIndex = 0;
-          setTimeout(typeNext, 600);
-        } else {
-          state = 'cmd';
-          charIndex = 0;
-          currentLine = (currentLine + 1) % commands.length;
-          setTimeout(typeNext, 1200);
-        }
-      }
-    }
-
-    typeNext();
-  </script>
 </body>
 </html>
