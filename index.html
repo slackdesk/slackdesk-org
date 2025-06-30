@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SlackDesk.org</title>
   <style>
     body {
@@ -16,7 +17,8 @@
 
     .matrix {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       z-index: -1;
@@ -54,15 +56,66 @@
       animation: fadein 3s ease-in-out forwards;
     }
 
-    .delay-1 { animation-delay: 2s; }
-    .delay-2 { animation-delay: 4s; }
-    .delay-3 { animation-delay: 6s; }
+    .delay-1 {
+      animation-delay: 2s;
+    }
+
+    .delay-2 {
+      animation-delay: 4s;
+    }
+
+    .delay-3 {
+      animation-delay: 6s;
+    }
 
     @keyframes fadein {
-      to { opacity: 1; }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .logo-container {
+      position: fixed;
+      top: 50%;
+      right: 2em;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+
+    .logo-container img {
+      width: 200px;
+      max-width: 30vw;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 10px #00ffcc);
+    }
+
+    @keyframes flicker {
+
+      0%,
+      100% {
+        opacity: 0.04;
+      }
+
+      50% {
+        opacity: 0.07;
+      }
+    }
+
+    .background-logo {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 70%;
+      height: 100vh;
+      background: url('slackdesk-logo.png') no-repeat center right;
+      background-size: contain;
+      opacity: 0.05;
+      z-index: 0;
+      pointer-events: none;
     }
   </style>
 </head>
+
 <body>
   <div class="matrix" id="matrix"></div>
 
@@ -112,11 +165,10 @@
 
     setInterval(generateMatrix, 500);
   </script>
+
+  <div class="logo-container">
+    <img src="slackdesk-logo.png" alt="SlackDesk Logo">
+  </div>
 </body>
+
 </html>
-
-
-
-
-
-
