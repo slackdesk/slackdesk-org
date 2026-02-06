@@ -1,72 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SlackDesk — Terminal-Driven Ideas</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 2rem;
-      background-color: #0d0d0d;
-      color: #00ffcc;
-      font-family: "Courier New", Courier, monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #00ffee;
-      text-shadow: 0 0 5px #00ffee;
-    }
-
-    .terminal-box {
-      max-width: 800px;
-      background-color: #111;
-      border: 2px solid #00ffcc;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 20px #00ffaa33;
-    }
-
-    p {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      white-space: pre-line;
-    }
-
-    .footer {
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      opacity: 0.5;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slackdesk QA Playground</title>
+  <link rel="stylesheet" href="/assets/qa-playground.css" />
 </head>
 <body>
-  <h1>SlackDesk</h1>
-  <div class="terminal-box">
-    <p>
-Welcome to SlackDesk..org
+  <div class="container">
+    <header class="header" data-testid="header">
+      <div class="brand">
+        <div style="font-size:20px">🧪</div>
+        <div>
+          <div style="font-weight:700">Slackdesk QA Playground</div>
+          <div class="badge" data-testid="build-badge">static · deterministic · testable</div>
+        </div>
+      </div>
+      <nav class="nav" data-testid="nav">
+        <a data-testid="nav-link" href="index.html">Home</a>
+        <a data-testid="nav-link" href="playground.html">Playground</a>
+      </nav>
+    </header>
 
-Our mission is to explore and extend the power of Slackware Linux through intelligent automation,
-test infrastructure, and the unfiltered logic of artificial intelligence.
+    <div style="height:16px"></div>
 
-SlackDesk is a terminal-inspired platform blending:
-- Slackware’s Unix purity
-- Automation from the ground up
-- AI-enhanced observability
-- Tools for the curious and unapologetically efficient
+    <div class="grid cols-2">
+      <section class="card" data-testid="card-overview">
+        <h2>What this site is for</h2>
+        <p>
+          A stable target for building your QA team’s test framework. Every interactive element has a
+          <code>data-testid</code>, and each section includes notes/hints you can assert against.
+        </p>
+        <div class="note" data-testid="note-overview">
+          Hint: Tests should prefer <strong>role/label/testid</strong> selectors and avoid brittle CSS.
+        </div>
+        <div class="actions">
+          <a class="inline" data-testid="cta-playground" href="playground.html">Open the Playground →</a>
+          <span class="inline" data-testid="clock">…</span>
+        </div>
+      </section>
 
-Stay tuned — systems are coming online...
-    </p>
+      <section class="card" data-testid="card-counter">
+        <h2>Counter widget</h2>
+        <p>Basic state changes for sanity tests.</p>
+        <div class="note" data-testid="note-counter">
+          Hint: Assert the value increments/decrements. No network. No randomness.
+        </div>
+
+        <div class="actions">
+          <button data-testid="counter-dec" aria-label="Decrement">−</button>
+          <span class="inline" data-testid="counter-value" aria-label="Counter value">0</span>
+          <button data-testid="counter-inc" aria-label="Increment">+</button>
+        </div>
+      </section>
+    </div>
+
+    <div style="height:16px"></div>
+
+    <section class="card" data-testid="card-links">
+      <h2>Testing conventions</h2>
+      <ul style="color:var(--muted); line-height:1.7; margin: 8px 0 0; padding-left: 18px;">
+        <li>Prefer <code>getByRole()</code> and <code>getByLabel()</code>, then <code>data-testid</code>.</li>
+        <li>No <code>sleep</code>/<code>waitForTimeout</code>; use conditions.</li>
+        <li>Every action should have at least one meaningful assertion.</li>
+        <li>Artifacts: trace + screenshot on failure.</li>
+      </ul>
+      <div class="note" data-testid="note-conventions">
+        Hint: Treat this list as your “framework contract” and enforce it in reviews.
+      </div>
+    </section>
   </div>
-  <div class="footer">
-    &copy; 2025 SlackDesk. Powered by Slackware.
-  </div>
+
+  <script src="/assets/qa-playground.js"></script>
 </body>
 </html>

@@ -1,0 +1,2 @@
+Slackdesk QA Playground sample file.
+Use this for deterministic download tests.

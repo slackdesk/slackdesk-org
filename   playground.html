@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QA Playground</title>
+  <link rel="stylesheet" href="/assets/qa-playground.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header" data-testid="header">
+      <div class="brand">
+        <div style="font-size:20px">🦞</div>
+        <div>
+          <div style="font-weight:700">QA Playground</div>
+          <div class="badge">forms · modal · tabs · accordion · table filter</div>
+        </div>
+      </div>
+      <nav class="nav" data-testid="nav">
+        <a data-testid="nav-link" href="index.html">Home</a>
+        <a data-testid="nav-link" href="playground.html">Playground</a>
+      </nav>
+    </header>
+
+    <div style="height:16px"></div>
+
+    <div class="grid cols-2">
+      <section class="card" data-testid="card-form">
+        <h2>Contact form</h2>
+        <p>Validation + async submit simulation (450ms).</p>
+        <div class="note" data-testid="note-form">
+          Hints:
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Invalid email should show an error list.</li>
+            <li>Message under 10 chars should fail.</li>
+            <li>Valid submit shows success alert.</li>
+          </ul>
+        </div>
+
+        <form data-testid="contact-form" aria-label="Contact form">
+          <label for="email">Email</label>
+          <input id="email" data-testid="email" type="email" autocomplete="off" placeholder="name@example.com" />
+
+          <div class="row cols-2">
+            <div>
+              <label for="topic">Topic</label>
+              <select id="topic" data-testid="topic">
+                <option value="">Select…</option>
+                <option value="bug">Bug report</option>
+                <option value="feedback">Feedback</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="priority">Priority</label>
+              <select id="priority" data-testid="priority">
+                <option value="p3">P3 (normal)</option>
+                <option value="p2">P2 (important)</option>
+                <option value="p1">P1 (urgent)</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="message">Message</label>
+          <textarea id="message" data-testid="message" placeholder="At least 10 characters..."></textarea>
+
+          <div class="actions">
+            <button class="primary" data-testid="submit" type="submit">Submit</button>
+            <button data-testid="reset" type="button">Reset</button>
+            <span class="inline" data-testid="submit-hint">Hint: submit disables briefly</span>
+          </div>
+
+          <div class="alert ok hidden" data-testid="alert-ok" role="status" aria-live="polite">
+            <strong>Success ✅</strong>
+            Thanks — your message was accepted (no backend used).
+          </div>
+
+          <div class="alert err hidden" data-testid="alert-err" role="alert" aria-live="assertive">
+            <strong>Fix the following:</strong>
+            <ul data-testid="error-list" style="margin:6px 0 0; padding-left:18px;"></ul>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" data-testid="card-ui">
+        <h2>UI components</h2>
+        <p>Modal + tabs + accordion for interaction coverage.</p>
+
+        <div class="note" data-testid="note-ui">
+          Hints:
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            <li>Modal close via backdrop click is enabled.</li>
+            <li>Tabs use <code>role=tab</code> and <code>aria-selected</code>.</li>
+            <li>Accordion uses native <code>&lt;details&gt;</code>.</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button data-testid="open-modal" aria-label="Open modal">Open modal</button>
+          <span class="inline" data-testid="modal-result" aria-label="Modal result">Not confirmed</span>
+        </div>
+
+        <div class="panel" data-testid="tabs-root">
+          <div class="tabs" role="tablist" aria-label="Demo tabs">
+            <button class="tab" role="tab" data-testid="tab-a" data-tab="a" aria-selected="true">Tab A</button>
+            <button class="tab" role="tab" data-testid="tab-b" data-tab="b" aria-selected="false">Tab B</button>
+            <button class="tab" role="tab" data-testid="tab-c" data-tab="c" aria-selected="false">Tab C</button>
+          </div>
+
+          <div role="tabpanel" data-testid="panel-a" data-panel="a">
+            <p><span class="inline">Panel A</span> — stable content for assertions.</p>
+          </div>
+          <div role="tabpanel" class="hidden" data-testid="panel-b" data-panel="b">
+            <p><span class="inline">Panel B</span> — switch tabs and assert visibility.</p>
+          </div>
+          <div role="tabpanel" class="hidden" data-testid="panel-c" data-panel="c">
+            <p><span class="inline">Panel C</span> — good for “only one visible” checks.</p>
+          </div>
+        </div>
+
+        <div class="panel" data-testid="accordion">
+          <details data-testid="acc-1">
+            <summary data-testid="acc-1-summary">Accordion item 1</summary>
+            <p data-testid="acc-1-body" style="color:var(--muted);">Hint: Assert body becomes visible when opened.</p>
+          </details>
+          <details data-testid="acc-2">
+            <summary data-testid="acc-2-summary">Accordion item 2</summary>
+            <p data-testid="acc-2-body" style="color:var(--muted);">Hint: Native details element toggles state.</p>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <div style="height:16px"></div>
+
+    <section class="card" data-testid="card-table">
+      <h2>Filterable table</h2>
+      <p>Simple “search filter” behavior for deterministic UI testing.</p>
+      <div class="note" data-testid="note-table">
+        Hint: Type “qa” to match multiple rows; type “xyz” to show the empty state.
+      </div>
+
+      <label for="filter">Filter</label>
+      <input id="filter" data-testid="filter-input" placeholder="Type to filter (e.g. qa, docs, slack)..." />
+
+      <div data-testid="table-empty" class="alert hidden" role="status">
+        <strong>No results</strong>
+        Try a different filter.
+      </div>
+
+      <table class="table" data-testid="table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Tag</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-testid="table-row"><td>Docs</td><td>docs</td><td>Stable text assertions</td></tr>
+          <tr data-testid="table-row"><td>QA</td><td>qa</td><td>Filtering checks</td></tr>
+          <tr data-testid="table-row"><td>Slackdesk</td><td>slack</td><td>Navigation sanity</td></tr>
+          <tr data-testid="table-row"><td>Playwright</td><td>qa</td><td>Role selectors</td></tr>
+        </tbody>
+      </table>
+
+      <div class="actions">
+        <a class="inline" data-testid="download-link" href="/assets/sample.txt" download>Download sample.txt</a>
+        <span class="inline" data-testid="download-hint">Hint: validate download started</span>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" data-testid="modal-backdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Confirm action">
+        <h3>Confirm action</h3>
+        <p style="color:var(--muted); margin-top:6px;">
+          Hint: Clicking “Confirm” updates the “Modal result” pill on this page.
+        </p>
+        <div class="actions">
+          <button data-testid="close-modal" class="danger">Cancel</button>
+          <button data-testid="confirm-modal" class="primary">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/assets/qa-playground.js"></script>
+</body>
+</html>
